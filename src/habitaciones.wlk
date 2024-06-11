@@ -13,6 +13,10 @@ class Dormitorio inherits Habitacion {
 		return super(persona) + if( persona.duermeEn(self) ) 10 / cantPersonas else 0
 //				      + ternaria
 	}
+	override method puedeEntrar(persona){
+		return persona.duermeEn(self) or self.todosOcupantesDuermen()
+	}
+method todosOcupantesDuermen() = ocupantes.count( {p => p.duermenEn(self)} ) == cantPersonas
 }
 class Banio inherits Habitacion {
 	override method nivelDeConfortQueAporta(persona) {
@@ -27,6 +31,10 @@ class Cocina inherits Habitacion {
 		return super(persona) + 
 		if(persona.tieneHabilidadesDeCocina()) metrosCuadrados * 
 		configValor.porcentajeConfortCocina() else 0
+	}
+	override method puedeEntrar(persona){		//	2.Cocina
+		return self.estaVacia() or not self.existeYaCocinero() and persona.tieneHabilidadesDeCocina())
+	}
 }
 object configValor{
 	var property porcentajeConfortCocina = 0.1
